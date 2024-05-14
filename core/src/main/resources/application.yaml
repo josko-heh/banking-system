@@ -1,0 +1,22 @@
+spring:
+    application:
+        name: banking-system
+    datasource:
+        url: jdbc:h2:mem:bankingDB
+        username: sa
+        password:
+        driverClassName: org.h2.Driver
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+        hibernate:
+            ddl-auto: update
+    h2:
+        console.enabled: true
+logging:
+    level:
+        com:
+            josko:
+                banking: DEBUG
+data:
+    path:
+        csv: ./generated/customers.csv
