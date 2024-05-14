@@ -12,11 +12,18 @@ spring:
             ddl-auto: update
     h2:
         console.enabled: true
+    main:
+        banner-mode: off
 logging:
     level:
         com:
             josko:
                 banking: DEBUG
+        org:
+            springframework: WARN
 data:
     path:
-        csv: ./generated/customers.csv
+        csv:
+            customer: ./generated/customers.csv
+            account: ./generated/accounts.csv
+            transaction: ./generated/transactions.csv

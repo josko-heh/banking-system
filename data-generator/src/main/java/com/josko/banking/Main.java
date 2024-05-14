@@ -44,7 +44,7 @@ public class Main {
 
 	private static void generateAccounts() {
 		try (FileWriter writer = new FileWriter(ACCOUNTS_FILE)) {
-			writer.write("accountId,iban,type,balance,pastMonthTurnover,customerId\n");
+			writer.write("accountId,iban,type,customerId\n");
 			for (int i = 0; i < NUM_ACCOUNTS; i++) {
 				String accountId = String.valueOf(i + 1);
 				String iban = generateIBAN();

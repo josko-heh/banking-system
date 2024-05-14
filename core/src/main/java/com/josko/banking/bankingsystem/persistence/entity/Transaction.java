@@ -22,11 +22,11 @@ public class Transaction {
 	@Column(nullable = false)
 	private Instant timestamp;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "senderAccountId", nullable = false)
 	private Account senderAccount;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "receiverAccountId", nullable = false)
 	private Account receiverAccount;
 }

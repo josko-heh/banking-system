@@ -7,18 +7,16 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class Initializer {
 
-	private final Set<DataLoader> dataLoaders;
+	private final DataLoader dataLoader;
 	
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		log.info("Application context refreshed. Loading data.");
-		dataLoaders.forEach(DataLoader::load);
+		dataLoader.load();
 	}
 }
