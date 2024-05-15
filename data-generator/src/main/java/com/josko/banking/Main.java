@@ -28,7 +28,7 @@ public class Main {
 	private static void generateCustomers() {
 		try (FileWriter writer = new FileWriter(CUSTOMERS_FILE)) {
 			writer.write("name,address,email,phoneNumber\n");
-			for (int i = 0; i < NUM_CUSTOMERS; i++) {
+			for (int i = 1; i <= NUM_CUSTOMERS; i++) {
 				String name = "Customer " + i;
 				String address = "Address " + i;
 				String email = "customer" + i + "@example.com";
@@ -44,13 +44,13 @@ public class Main {
 	private static void generateAccounts() {
 		try (FileWriter writer = new FileWriter(ACCOUNTS_FILE)) {
 			writer.write("iban,type,customerId\n");
-			for (int i = 0; i < NUM_ACCOUNTS; i++) {
+			for (int i = 1; i <= NUM_ACCOUNTS; i++) {
 				String iban = generateIBAN();
 				String type = generateAccountType();
 				
 				String customerId;
-				if (i < NUM_CUSTOMERS) { // give each customer an account
-					customerId = String.valueOf(i + 1);
+				if (i <= NUM_CUSTOMERS) { // give each customer an account
+					customerId = String.valueOf(i);
 				} else { // assign to a random customer after each customer has one account
 					customerId = String.valueOf(random.nextInt(NUM_CUSTOMERS) + 1);
 				}
@@ -66,7 +66,7 @@ public class Main {
 	private static void generateTransactions() {
 		try (FileWriter writer = new FileWriter(TRANSACTIONS_FILE)) {
 			writer.write("amount,message,timestamp,senderAccountId,receiverAccountId\n");
-			for (int i = 0; i < NUM_TRANSACTIONS; i++) {
+			for (int i = 1; i <= NUM_TRANSACTIONS; i++) {
 				double amount = roundToTwoDecimal((random.nextDouble() + 0.001) * 1000);
 				String message = "Transaction " + i;
 				Instant timestamp = Instant.now().minusSeconds(random.nextInt(3600 * 24 * 365)); // Random timestamp within a year
