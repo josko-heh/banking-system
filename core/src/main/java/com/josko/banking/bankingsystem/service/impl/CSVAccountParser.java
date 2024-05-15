@@ -26,11 +26,10 @@ public class CSVAccountParser implements CSVRecordParser<AccountRecord> {
 
 	@Override
 	public AccountRecord parse(CSVRecord csvRecord) {
-		Long accountId = Long.parseLong(csvRecord.get("accountId"));
 		String iban = csvRecord.get("iban");
 		Account.AccountType type = Account.AccountType.valueOf(csvRecord.get("type"));
 		Long customerId = Long.parseLong(csvRecord.get("customerId"));
 
-		return new AccountRecord(accountId, iban, type, customerId);
+		return new AccountRecord(iban, type, customerId);
 	}
 }

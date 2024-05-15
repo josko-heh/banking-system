@@ -27,13 +27,12 @@ public class CSVTransactionParser implements CSVRecordParser<TransactionRecord> 
 
 	@Override
 	public TransactionRecord parse(CSVRecord csvRecord) {
-		Long transactionId = Long.parseLong(csvRecord.get("transactionId"));
 		Double amount = Double.parseDouble(csvRecord.get("amount"));
 		String message = csvRecord.get("message");
 		Instant timestamp = Instant.parse(csvRecord.get("timestamp"));
 		Long senderAccountId = Long.parseLong(csvRecord.get("senderAccountId"));
 		Long receiverAccountId = Long.parseLong(csvRecord.get("receiverAccountId"));
 
-		return new TransactionRecord(transactionId, amount, message, timestamp, senderAccountId, receiverAccountId);
+		return new TransactionRecord(amount, message, timestamp, senderAccountId, receiverAccountId);
 	}
 }

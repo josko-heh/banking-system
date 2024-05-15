@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CustomerRecord implements LoadingRecord {
-    private Long customerId;
     private String name;
     private String address;
     private String email;

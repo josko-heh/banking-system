@@ -8,7 +8,6 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 public class TransactionRecord implements LoadingRecord {
-    private Long transactionId;
     private Double amount;
     private String message;
     private Instant timestamp;

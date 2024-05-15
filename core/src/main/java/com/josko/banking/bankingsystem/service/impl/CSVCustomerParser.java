@@ -25,12 +25,11 @@ public class CSVCustomerParser implements CSVRecordParser<CustomerRecord> {
 
 	@Override
 	public CustomerRecord parse(CSVRecord csvRecord) {
-		Long customerId = Long.parseLong(csvRecord.get("customerId"));
 		String name = csvRecord.get("name");
 		String address = csvRecord.get("address");
 		String email = csvRecord.get("email");
 		String phoneNumber = csvRecord.get("phoneNumber");
 
-		return new CustomerRecord(customerId, name, address, email, phoneNumber);
+		return new CustomerRecord(name, address, email, phoneNumber);
 	}
 }

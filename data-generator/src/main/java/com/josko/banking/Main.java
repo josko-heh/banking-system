@@ -27,14 +27,13 @@ public class Main {
 
 	private static void generateCustomers() {
 		try (FileWriter writer = new FileWriter(CUSTOMERS_FILE)) {
-			writer.write("customerId,name,address,email,phoneNumber\n");
+			writer.write("name,address,email,phoneNumber\n");
 			for (int i = 0; i < NUM_CUSTOMERS; i++) {
-				String customerId = String.valueOf(i + 1);
-				String name = "Customer " + customerId;
-				String address = "Address " + customerId;
-				String email = "customer" + customerId + "@example.com";
+				String name = "Customer " + i;
+				String address = "Address " + i;
+				String email = "customer" + i + "@example.com";
 				String phoneNumber = generatePhoneNumber();
-				writer.write(customerId + "," + name + "," + address + "," + email + "," + phoneNumber + "\n");
+				writer.write(name + "," + address + "," + email + "," + phoneNumber + "\n");
 			}
 			System.out.println("Customers CSV generated successfully.");
 		} catch (IOException e) {
@@ -44,9 +43,8 @@ public class Main {
 
 	private static void generateAccounts() {
 		try (FileWriter writer = new FileWriter(ACCOUNTS_FILE)) {
-			writer.write("accountId,iban,type,customerId\n");
+			writer.write("iban,type,customerId\n");
 			for (int i = 0; i < NUM_ACCOUNTS; i++) {
-				String accountId = String.valueOf(i + 1);
 				String iban = generateIBAN();
 				String type = generateAccountType();
 				
@@ -57,7 +55,7 @@ public class Main {
 					customerId = String.valueOf(random.nextInt(NUM_CUSTOMERS) + 1);
 				}
 				
-				writer.write(accountId + "," + iban + "," + type + "," + customerId + "\n");
+				writer.write(iban + "," + type + "," + customerId + "\n");
 			}
 			System.out.println("Accounts CSV generated successfully.");
 		} catch (IOException e) {
@@ -67,11 +65,10 @@ public class Main {
 
 	private static void generateTransactions() {
 		try (FileWriter writer = new FileWriter(TRANSACTIONS_FILE)) {
-			writer.write("transactionId,amount,message,timestamp,senderAccountId,receiverAccountId\n");
+			writer.write("amount,message,timestamp,senderAccountId,receiverAccountId\n");
 			for (int i = 0; i < NUM_TRANSACTIONS; i++) {
-				String transactionId = String.valueOf(i + 1);
 				double amount = roundToTwoDecimal((random.nextDouble() + 0.001) * 1000);
-				String message = "Transaction " + transactionId;
+				String message = "Transaction " + i;
 				Instant timestamp = Instant.now().minusSeconds(random.nextInt(3600 * 24 * 365)); // Random timestamp within a year
 				String senderAccountId = String.valueOf(random.nextInt(NUM_ACCOUNTS) + 1);
 				
@@ -80,7 +77,7 @@ public class Main {
 					receiverAccountId = String.valueOf(random.nextInt(NUM_ACCOUNTS) + 1);
 				} while (senderAccountId.equals(receiverAccountId));
 				
-				writer.write(transactionId + "," + amount + "," + message + "," + timestamp + "," + senderAccountId + "," + receiverAccountId + "\n");
+				writer.write(amount + "," + message + "," + timestamp + "," + senderAccountId + "," + receiverAccountId + "\n");
 			}
 			System.out.println("Transactions CSV generated successfully.");
 		} catch (IOException e) {
