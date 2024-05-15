@@ -1,6 +1,5 @@
-package com.josko.banking.bankingsystem.service.impl;
+package com.josko.banking.bankingsystem.service.csv;
 
-import com.josko.banking.bankingsystem.service.CSVRecordParser;
 import com.josko.banking.bankingsystem.service.DataLoader;
 import com.josko.banking.bankingsystem.service.RecordCreationService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ import static java.util.stream.Collectors.toMap;
 
 @Component
 @Slf4j
-class CSVDataLoader implements DataLoader {
+public class CSVDataLoader implements DataLoader {
 
 	private static final CSVFormat CSV_FORMAT = CSVFormat.DEFAULT.builder()
 			.setHeader()

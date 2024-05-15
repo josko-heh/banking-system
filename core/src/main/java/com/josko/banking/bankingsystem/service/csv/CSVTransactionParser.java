@@ -1,6 +1,5 @@
-package com.josko.banking.bankingsystem.service.impl;
+package com.josko.banking.bankingsystem.service.csv;
 
-import com.josko.banking.bankingsystem.service.CSVRecordParser;
 import com.josko.banking.bankingsystem.service.record.TransactionRecord;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-public class CSVTransactionParser implements CSVRecordParser<TransactionRecord> {
+class CSVTransactionParser implements CSVRecordParser<TransactionRecord> {
 
 	@Value("${data.path.csv.transaction}")
 	private String csvPath;

@@ -1,13 +1,12 @@
-package com.josko.banking.bankingsystem.service.impl;
+package com.josko.banking.bankingsystem.service.csv;
 
-import com.josko.banking.bankingsystem.service.CSVRecordParser;
 import com.josko.banking.bankingsystem.service.record.CustomerRecord;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CSVCustomerParser implements CSVRecordParser<CustomerRecord> {
+class CSVCustomerParser implements CSVRecordParser<CustomerRecord> {
 
 	@Value("${data.path.csv.customer}")
 	private String csvPath;
