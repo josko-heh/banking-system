@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
 
-@Service
+@Component
 @Slf4j
 class CSVDataLoader implements DataLoader {
 

@@ -1,5 +1,6 @@
 package com.josko.banking.bankingsystem.startup;
 
+import com.josko.banking.bankingsystem.service.DataInitializer;
 import com.josko.banking.bankingsystem.service.DataLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +14,14 @@ import org.springframework.stereotype.Component;
 public class Initializer {
 
 	private final DataLoader dataLoader;
+	private final DataInitializer dataInitializer;
 	
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		log.info("Application context refreshed. Loading data.");
+		log.info("Loading data.");
 		dataLoader.load();
+		
+		log.info("Initializing data.");
+		dataInitializer.initialize();
 	}
 }
