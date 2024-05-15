@@ -29,4 +29,10 @@ public class Transaction {
 	@ManyToOne
 	@JoinColumn(name = "receiverAccountId", nullable = false)
 	private Account receiverAccount;
+
+	
+	@PrePersist
+	public void prePersist() {
+		timestamp = Instant.now();
+	}
 }

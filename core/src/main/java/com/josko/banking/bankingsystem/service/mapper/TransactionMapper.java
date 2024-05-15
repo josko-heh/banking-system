@@ -1,6 +1,7 @@
 package com.josko.banking.bankingsystem.service.mapper;
 
 import com.josko.banking.bankingsystem.persistence.entity.Transaction;
+import com.josko.banking.bankingsystem.presentation.dto.TransactionDTO;
 import com.josko.banking.bankingsystem.service.record.TransactionRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -9,4 +10,6 @@ import org.mapstruct.MappingConstants;
 public abstract class TransactionMapper {
 
 	public abstract Transaction fromRecord(TransactionRecord transactionRecord);
+	
+	public abstract Transaction fromDTO(TransactionDTO dto);
 }
