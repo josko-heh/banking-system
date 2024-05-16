@@ -1,13 +1,13 @@
 package com.josko.banking.bankingsystem.service.impl;
 
 import com.josko.banking.bankingsystem.persistence.entity.Account;
-import com.josko.banking.bankingsystem.persistence.entity.Customer;
 import com.josko.banking.bankingsystem.persistence.entity.Transaction;
 import com.josko.banking.bankingsystem.persistence.repository.AccountRepository;
 import com.josko.banking.bankingsystem.persistence.repository.CustomerRepository;
 import com.josko.banking.bankingsystem.persistence.repository.TransactionRepository;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionDTO;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionHistory;
+import com.josko.banking.bankingsystem.service.EmailService;
 import com.josko.banking.bankingsystem.service.RecordCreationService;
 import com.josko.banking.bankingsystem.service.TransactionService;
 import com.josko.banking.bankingsystem.service.mapper.TransactionMapper;
@@ -34,6 +34,7 @@ public class TransactionServiceImpl implements RecordCreationService<Transaction
 	private final TransactionMapper mapper;
 	private final AccountRepository accountRepository;
 	private final CustomerRepository customerRepository;
+	private final EmailService emailService;
 
 	
 	@Override
@@ -58,18 +59,41 @@ public class TransactionServiceImpl implements RecordCreationService<Transaction
 	@Override
 	@Transactional
 	public Optional<Long> create(TransactionDTO dto) {
+		Account receiverAccount = null;
+		Account senderAccount = null;
+		Double oldReceiverBalance = null;
+		Double oldSenderBalance = null;
+
 		try {
+			receiverAccount = accountRepository.findById(dto.receiverAccountId()).orElseThrow();
+			senderAccount = accountRepository.findById(dto.senderAccountId()).orElseThrow();
+
 			Transaction entity = mapper.fromDTO(dto);
-			entity.setReceiverAccount(accountRepository.findById(dto.receiverAccountId()).orElseThrow());
-			entity.setSenderAccount(accountRepository.findById(dto.senderAccountId()).orElseThrow());
-			
+			entity.setReceiverAccount(receiverAccount);
+			entity.setSenderAccount(senderAccount);
+
 			var created = repository.save(entity);
 
+			oldReceiverBalance = receiverAccount.getBalance();
+			oldSenderBalance = senderAccount.getBalance();
+
 			updateBalance(created, dto.amount());
+
+			notifyCustomer(receiverAccount, dto, true, oldReceiverBalance);
+			notifyCustomer(senderAccount, dto, true, oldSenderBalance);
 
 			return of(created.getTransactionId());
 		} catch (RuntimeException e) {
 			log.error("Failed to create a transaction.", e);
+
+			if (receiverAccount != null && oldReceiverBalance != null) {
+				notifyCustomer(receiverAccount, dto, false, oldReceiverBalance);
+			}
+
+			if (senderAccount != null && oldSenderBalance != null) {
+				notifyCustomer(senderAccount, dto, false, oldSenderBalance);
+			}
+
 			return Optional.empty();
 		}
 	}
@@ -95,5 +119,11 @@ public class TransactionServiceImpl implements RecordCreationService<Transaction
 
 		receiverAccount.setBalance(receiverAccount.getBalance() + amount);
 		senderAccount.setBalance(senderAccount.getBalance() - amount);
+	}
+	
+	private void notifyCustomer(Account account, TransactionDTO dto, boolean successful, Double oldBalance) {
+		var email = account.getCustomer().getEmail();
+		var newBalance = account.getBalance();
+		emailService.sendTransactionConfirmationEmail(email, dto, successful, oldBalance, newBalance);
 	}
 }
