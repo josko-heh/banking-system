@@ -1,10 +1,13 @@
 package com.josko.banking.bankingsystem.service.impl;
 
 import com.josko.banking.bankingsystem.persistence.entity.Account;
+import com.josko.banking.bankingsystem.persistence.entity.Customer;
 import com.josko.banking.bankingsystem.persistence.entity.Transaction;
 import com.josko.banking.bankingsystem.persistence.repository.AccountRepository;
+import com.josko.banking.bankingsystem.persistence.repository.CustomerRepository;
 import com.josko.banking.bankingsystem.persistence.repository.TransactionRepository;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionDTO;
+import com.josko.banking.bankingsystem.presentation.dto.TransactionHistory;
 import com.josko.banking.bankingsystem.service.RecordCreationService;
 import com.josko.banking.bankingsystem.service.TransactionService;
 import com.josko.banking.bankingsystem.service.mapper.TransactionMapper;
@@ -16,6 +19,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.of;
@@ -29,6 +33,7 @@ public class TransactionServiceImpl implements RecordCreationService<Transaction
 	private final TransactionRepository repository;
 	private final TransactionMapper mapper;
 	private final AccountRepository accountRepository;
+	private final CustomerRepository customerRepository;
 
 	
 	@Override
@@ -67,6 +72,21 @@ public class TransactionServiceImpl implements RecordCreationService<Transaction
 			log.error("Failed to create a transaction.", e);
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public Optional<TransactionHistory> getHistory(Long customerId) {
+		var customerOptional = customerRepository.findById(customerId);
+
+		if (customerOptional.isEmpty())
+			return Optional.empty();
+
+		var customer = customerOptional.get();
+
+		List<TransactionDTO> sent = mapper.toDTOs(repository.findBySender(customer));
+		List<TransactionDTO> received = mapper.toDTOs(repository.findBySender(customer));
+
+		return of(new TransactionHistory(sent, received));
 	}
 
 	private static void updateBalance(Transaction transaction, Double amount) {

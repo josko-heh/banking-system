@@ -1,15 +1,15 @@
 package com.josko.banking.bankingsystem.presentation.controller;
 
 import com.josko.banking.bankingsystem.presentation.dto.TransactionDTO;
+import com.josko.banking.bankingsystem.presentation.dto.TransactionHistory;
 import com.josko.banking.bankingsystem.service.TransactionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +23,26 @@ public class TransactionController {
 		var transactionId = transactionService.create(transactionDTO);
 
 		if (transactionId.isPresent()) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(transactionId.get());
+			return ResponseEntity.status(CREATED).body(transactionId.get());
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
+	@GetMapping("/history/{customerId}")
+	public ResponseEntity<TransactionHistory> getHistory(@PathVariable Long customerId) {
+		var historyOpt = transactionService.getHistory(customerId);
+		
+		if (historyOpt.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		var history = historyOpt.get();
+		
+		if (history.received().isEmpty() && history.sent().isEmpty()) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.ok(history);
 		}
 	}
 
