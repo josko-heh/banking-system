@@ -5,6 +5,8 @@ import com.josko.banking.bankingsystem.persistence.entity.Transaction;
 import com.josko.banking.bankingsystem.persistence.repository.AccountRepository;
 import com.josko.banking.bankingsystem.persistence.repository.CustomerRepository;
 import com.josko.banking.bankingsystem.persistence.repository.TransactionRepository;
+import com.josko.banking.bankingsystem.persistence.repository.criteria.TransactionRepoCriteria;
+import com.josko.banking.bankingsystem.presentation.dto.TransactionCriteria;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionDTO;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionHistory;
 import com.josko.banking.bankingsystem.service.EmailService;
@@ -99,16 +101,18 @@ public class TransactionServiceImpl implements RecordCreationService<Transaction
 	}
 
 	@Override
-	public Optional<TransactionHistory> getHistory(Long customerId) {
-		var customerOptional = customerRepository.findById(customerId);
+	public Optional<TransactionHistory> getHistory(Long customerId, TransactionCriteria criteria) {
 
-		if (customerOptional.isEmpty())
+		if (!customerRepository.existsById(customerId))
 			return Optional.empty();
 
-		var customer = customerOptional.get();
+		var sentCriteria = new TransactionRepoCriteria(
+				criteria.fromAmount(), criteria.toAmount(), criteria.message(), customerId, null);
+		var receivedCriteria = new TransactionRepoCriteria(
+				criteria.fromAmount(), criteria.toAmount(), criteria.message(), null, customerId);
 
-		List<TransactionDTO> sent = mapper.toDTOs(repository.findBySender(customer));
-		List<TransactionDTO> received = mapper.toDTOs(repository.findBySender(customer));
+		List<TransactionDTO> sent = mapper.toDTOs(repository.findByCriteria(sentCriteria));
+		List<TransactionDTO> received = mapper.toDTOs(repository.findByCriteria(receivedCriteria));
 
 		return of(new TransactionHistory(sent, received));
 	}

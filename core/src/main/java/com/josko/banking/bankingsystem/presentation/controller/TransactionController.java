@@ -1,5 +1,6 @@
 package com.josko.banking.bankingsystem.presentation.controller;
 
+import com.josko.banking.bankingsystem.presentation.dto.TransactionCriteria;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionDTO;
 import com.josko.banking.bankingsystem.presentation.dto.TransactionHistory;
 import com.josko.banking.bankingsystem.service.TransactionService;
@@ -30,8 +31,8 @@ public class TransactionController {
 	}
 
 	@GetMapping("/history/{customerId}")
-	public ResponseEntity<TransactionHistory> getHistory(@PathVariable Long customerId) {
-		var historyOpt = transactionService.getHistory(customerId);
+	public ResponseEntity<TransactionHistory> getHistory(@PathVariable Long customerId, TransactionCriteria criteria) {
+		var historyOpt = transactionService.getHistory(customerId, criteria);
 		
 		if (historyOpt.isEmpty()) {
 			return ResponseEntity.notFound().build();
