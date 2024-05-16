@@ -1,0 +1,1 @@
+Run data-generator/src/main/java/com/josko/banking/Main.java to fill generated directory.

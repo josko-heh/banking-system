@@ -24,6 +24,6 @@ logging:
 data:
     path:
         csv:
-            customer: ./generated/customers.csv
-            account: ./generated/accounts.csv
-            transaction: ./generated/transactions.csv
+            customer: ../generated/customers.csv
+            account: ../generated/accounts.csv
+            transaction: ../generated/transactions.csv
