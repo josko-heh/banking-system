@@ -67,7 +67,7 @@ public class EmailServiceImpl implements EmailService {
                 
                 Regards,
                 Your XYZ bank
-                """, transaction.id(), status, transaction.amount(), action,
+                """, transaction.transactionId(), status, transaction.amount(), action,
                 oldBalance, newBalance);
     }
 }
