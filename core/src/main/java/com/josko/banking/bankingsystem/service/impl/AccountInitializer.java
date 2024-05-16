@@ -7,12 +7,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BalanceInitializer implements DataInitializer {
+public class AccountInitializer implements DataInitializer {
 	
 	private final AccountRepository accountRepository;
+	private final TurnoverUpdater turnoverUpdater;
 	
 	@Override
 	public void initialize() {
 		accountRepository.updateAccountBalances();
+		turnoverUpdater.updateTurnovers();
 	}
 }
